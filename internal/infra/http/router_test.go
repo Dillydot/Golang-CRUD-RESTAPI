@@ -443,7 +443,7 @@ func TestRouter_getProductsHandler(t *testing.T) {
 
 		limit := tt.limit
 		if limit == "" {
-			limit = "20"
+			limit = "5"
 		}
 		limitNumber, _ := strconv.Atoi(limit)
 

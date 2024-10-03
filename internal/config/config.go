@@ -21,12 +21,13 @@ func LoadConfig() (Config, error) {
 	viper.AddConfigPath(".")
 	viper.SetConfigName("app")
 	viper.SetConfigType("env")
-	viper.AutomaticEnv()
 
 	err := viper.ReadInConfig()
 	if err != nil {
 		return Config{}, err
 	}
+
+	viper.AutomaticEnv()
 
 	var p Postgres
 	err = viper.Unmarshal(&p)

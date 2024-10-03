@@ -20,7 +20,7 @@ const (
 	getProductEndpoint    string = "GET /api/v1/products/{product_id}"
 	getProductsEndpoint   string = "GET /api/v1/products"
 
-	getProductsDefaultLimit  = 20
+	getProductsDefaultLimit  = 5
 	getProductsDefaultOffset = 0
 )
 
@@ -182,12 +182,12 @@ func (r Router) getProductsHandler(w http.ResponseWriter, req *http.Request) {
 	query := req.URL.Query()
 
 	limit, err := strconv.Atoi(query.Get("limit"))
-	if err != nil {
+	if err != nil || limit < 1 {
 		limit = getProductsDefaultLimit
 	}
 
 	offset, err := strconv.Atoi(query.Get("offset"))
-	if err != nil {
+	if err != nil || offset < 1 {
 		offset = getProductsDefaultOffset
 	}
 

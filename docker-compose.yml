@@ -1,7 +1,17 @@
 version: "3.3"
 
 services:
-  db:
+  server:
+    image: simpler-server
+    build: .
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres
+    networks:
+      - simpler-net
+
+  postgres:
     platform: linux/x86_64
     image: postgres:17.0
     restart: always
@@ -12,7 +22,19 @@ services:
       POSTGRES_USER: "test-user"
       POSTGRES_DB: "test-db"
     networks:
-      - simpler-tha
+      - simpler-net
+
+  migrate:
+    image: migrate/migrate
+    volumes:
+      - ./migrations:/migrations
+    command: [ "-path", "/migrations", "-database",  "postgres://test-user:a12345@postgres:5432/test-db?sslmode=disable", "up", "3" ]
+    links:
+      - postgres
+    depends_on:
+      - postgres
+    networks:
+      - simpler-net
 
 networks:
-  simpler-tha:
+  simpler-net:
